@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:dropbox="http://www.mulesoft.org/schema/mule/dropbox"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:amqp="http://www.mulesoft.org/schema/mule/amqp"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/amqp http://www.mulesoft.org/schema/mule/amqp/current/mule-amqp.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/dropbox http://www.mulesoft.org/schema/mule/dropbox/current/mule-dropbox.xsd">
+	<flow name="dropboxFlow">
+		<http:listener doc:name="Listener"
+			config-ref="HTTP_Listener_config:8081" path="/dropbox" />
+		<dropbox:upload-file doc:name="Files: Upload file"
+			config-ref="Dropbox_User_Configuration" path="/muleUploads/demo.json">
+			<dropbox:file-content><![CDATA[#[{
+	"connector": "dropbox",
+	"op": "upload"
+}]]]></dropbox:file-content>
+		</dropbox:upload-file>
+		<logger level="INFO" doc:name="Logger" message="Upload done" />
+	</flow>
+</mule>
